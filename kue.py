@@ -1,0 +1,250 @@
+from http.cookies import SimpleCookie
+
+rawdata = """[
+    {
+        "name": "test",
+        "value": "rd1o00000000000000000000ffff8d92fc88o10069",
+        "domain": "ilearning.oracle.com",
+        "hostOnly": true,
+        "path": "/",
+        "secure": false,
+        "httpOnly": false,
+        "sameSite": "no_restriction",
+        "session": false,
+        "firstPartyDomain": "",
+        "expirationDate": 1580666803,
+        "storeId": null
+    },
+    {
+        "name": "ORA_UCM_INFO",
+        "value": "3~902F51F34032CF1AE050E60AD17F45B4~Kevin~Agusto~kevinagusto28@gmail.com",
+        "domain": ".oracle.com",
+        "hostOnly": false,
+        "path": "/",
+        "secure": false,
+        "httpOnly": false,
+        "sameSite": "no_restriction",
+        "session": false,
+        "firstPartyDomain": "",
+        "expirationDate": 1587338935,
+        "storeId": null
+    },
+    {
+        "name": "oracle.uix",
+        "value": "0^^GMT+7:00^p",
+        "domain": ".ilearning.oracle.com",
+        "hostOnly": false,
+        "path": "/",
+        "secure": false,
+        "httpOnly": false,
+        "sameSite": "no_restriction",
+        "session": false,
+        "firstPartyDomain": "",
+        "expirationDate": 1896257203,
+        "storeId": null
+    },
+    {
+        "name": "oracle.ila.loginCookie",
+        "value": "3yN8w9lkWSBqhpycnosSiA$$",
+        "domain": "ilearning.oracle.com",
+        "hostOnly": true,
+        "path": "/ilearn/en/learner/jsp",
+        "secure": false,
+        "httpOnly": false,
+        "sameSite": "no_restriction",
+        "session": false,
+        "firstPartyDomain": "",
+        "expirationDate": 1582689403,
+        "storeId": null
+    },
+    {
+        "name": "WTPERSIST",
+        "value": "wt.gcm_uid=902f51f34032cf1ae050e60ad17f45b4&wt.p_cookie_att=0~implied~www_mrkt&wt.p_status=p",
+        "domain": ".oracle.com",
+        "hostOnly": false,
+        "path": "/",
+        "secure": false,
+        "httpOnly": false,
+        "sameSite": "no_restriction",
+        "session": false,
+        "firstPartyDomain": "",
+        "expirationDate": 1611347077,
+        "storeId": null
+    },
+    {
+        "name": "atgRecVisitorId",
+        "value": "13BFS6eIz5s9K-4Ltm_AwQhLrziaaOnynLnBG9soi71J6r44154",
+        "domain": ".oracle.com",
+        "hostOnly": false,
+        "path": "/",
+        "secure": false,
+        "httpOnly": false,
+        "sameSite": "no_restriction",
+        "session": false,
+        "firstPartyDomain": "",
+        "expirationDate": 2145916800,
+        "storeId": null
+    },
+    {
+        "name": "ELOQUA",
+        "value": "GUID=65C4E14A1D004962A7C0797E662162C5",
+        "domain": ".oracle.com",
+        "hostOnly": false,
+        "path": "/",
+        "secure": false,
+        "httpOnly": false,
+        "sameSite": "no_restriction",
+        "session": false,
+        "firstPartyDomain": "",
+        "expirationDate": 1613189720,
+        "storeId": null
+    },
+    {
+        "name": "s_nr",
+        "value": "1580296254133-Repeat",
+        "domain": ".oracle.com",
+        "hostOnly": false,
+        "path": "/",
+        "secure": false,
+        "httpOnly": false,
+        "sameSite": "no_restriction",
+        "session": false,
+        "firstPartyDomain": "",
+        "expirationDate": 1582888254,
+        "storeId": null
+    },
+    {
+        "name": "oracle.ila.siteCookie",
+        "value": "GOBQxSYc/Kw$",
+        "domain": "ilearning.oracle.com",
+        "hostOnly": true,
+        "path": "/ilearn/en/learner/jsp",
+        "secure": false,
+        "httpOnly": false,
+        "sameSite": "no_restriction",
+        "session": false,
+        "firstPartyDomain": "",
+        "expirationDate": 1583228814,
+        "storeId": null
+    },
+    {
+        "name": "mmapi.store.p.0",
+        "value": "%7B%22mmparams.d%22%3A%7B%7D%2C%22mmparams.p%22%3A%7B%22uat%22%3A%221611098894555%7C%7B%5C%22CampaignID%5C%22%3A%5C%22NoValue%5C%22%2C%5C%22CategoryID%5C%22%3A%5C%22NoValue%5C%22%7D%22%2C%22pd%22%3A%221611098894717%7C%5C%22-524543605%7CAgAAAApVAwDl8wxenxLA1AABEgABQgDqBib4AQDq2g1sAJ7XSGcE12sAntdIAAAAAP%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FABJwcm9maWxlLm9yYWNsZS5jb20DnxIBAAAAAAAAAAAA%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FAQCrEAEAnHXyLgSfEgD%2F%2F%2F%2F%2FAZ8SnxL%2F%2FwEAAAEAAAAAAVF%2FAgCnwwMAAAAAAAAAAUU%3D%5C%22%22%2C%22bid%22%3A%221579563494337%7C%5C%22lvsvwcgus01%5C%22%22%2C%22srv%22%3A%221611098894725%7C%5C%22lvsvwcgus01%5C%22%22%7D%7D",
+        "domain": ".oracle.com",
+        "hostOnly": false,
+        "path": "/",
+        "secure": false,
+        "httpOnly": false,
+        "sameSite": "no_restriction",
+        "session": false,
+        "firstPartyDomain": "",
+        "expirationDate": 1611098894,
+        "storeId": null
+    },
+    {
+        "name": "_gcl_au",
+        "value": "1.1.1502362991.1578888921",
+        "domain": ".oracle.com",
+        "hostOnly": false,
+        "path": "/",
+        "secure": false,
+        "httpOnly": false,
+        "sameSite": "no_restriction",
+        "session": false,
+        "firstPartyDomain": "",
+        "expirationDate": 1587586922,
+        "storeId": null
+    },
+    {
+        "name": "JSESSIONID",
+        "value": "2103c63bd6709230f1b09facae305bd0578983c623bdef6253d4e1969bb2b6f4.e38Mb34KaxqOci0LbN0PaNyKahqLe0",
+        "domain": "ilearning.oracle.com",
+        "hostOnly": true,
+        "path": "/ilearn",
+        "secure": false,
+        "httpOnly": false,
+        "sameSite": "no_restriction",
+        "session": true,
+        "firstPartyDomain": "",
+        "storeId": null
+    },
+    {
+        "name": "ORA_WWW_MRKT",
+        "value": "v:1~g:902F51F34032CF1AE050E60AD17F45B4~t:NOT_FOUND~c:LP05",
+        "domain": ".oracle.com",
+        "hostOnly": false,
+        "path": "/",
+        "secure": false,
+        "httpOnly": false,
+        "sameSite": "no_restriction",
+        "session": false,
+        "firstPartyDomain": "",
+        "expirationDate": 1587338935,
+        "storeId": null
+    },
+    {
+        "name": "ORA_WWW_PERSONALIZE",
+        "value": "v:1~i:WM148050~r:NOT_FOUND~g:APAC~l:en~cs:NOT_FOUND~cn:SMKN 1 Cibinong",
+        "domain": ".oracle.com",
+        "hostOnly": false,
+        "path": "/",
+        "secure": false,
+        "httpOnly": false,
+        "sameSite": "no_restriction",
+        "session": false,
+        "firstPartyDomain": "",
+        "expirationDate": 1587338935,
+        "storeId": null
+    },
+    {
+        "name": "oracle.ila.player",
+        "value": "pNRGe3tXJpofJ2cM2tKemZrPRZYEnGXF",
+        "domain": ".oracle.com",
+        "hostOnly": false,
+        "path": "/",
+        "secure": false,
+        "httpOnly": false,
+        "sameSite": "no_restriction",
+        "session": true,
+        "firstPartyDomain": "",
+        "storeId": null
+    },
+    {
+        "name": "ORASSO_AUTH_HINT",
+        "value": "v1.0~20200121072855",
+        "domain": ".oracle.com",
+        "hostOnly": false,
+        "path": "/",
+        "secure": false,
+        "httpOnly": false,
+        "sameSite": "no_restriction",
+        "session": false,
+        "firstPartyDomain": "",
+        "expirationDate": 1611098935,
+        "storeId": null
+    },
+    {
+        "name": "s_fid",
+        "value": "54AB5D8DC5E1CD20-198C1B433A15EF16",
+        "domain": ".oracle.com",
+        "hostOnly": false,
+        "path": "/",
+        "secure": false,
+        "httpOnly": false,
+        "sameSite": "no_restriction",
+        "session": false,
+        "firstPartyDomain": "",
+        "expirationDate": 1738149054,
+        "storeId": null
+    }
+]"""
+cookie = SimpleCookie()
+cookie.load(rawdata)
+
+# Even though SimpleCookie is dictionary-like, it internally uses a Morsel object
+# which is incompatible with requests. Manually construct a dictionary instead.
+cookies = {}
+for key, morsel in cookie.items():
+    cookies[key] = morsel.value
+
+print(cookies)

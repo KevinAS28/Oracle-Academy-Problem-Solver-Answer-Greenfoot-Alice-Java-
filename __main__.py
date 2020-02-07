@@ -1,43 +1,113 @@
-# import requests
-# import urllib.request
-# import time
-# from bs4 import BeautifulSoup
-# from requests_html import HTMLSession
+import subprocess
+import re
+import os
+from bs4 import BeautifulSoup
+
+def getClipboardData():
+    p = subprocess.Popen(['xclip','-selection', 'clipboard', '-o'], stdout=subprocess.PIPE)
+    retcode = p.wait()
+    data = p.stdout.read()
+    return data
+
+def setClipboardData(data):
+    p = subprocess.Popen(['xclip','-selection','clipboard'], stdin=subprocess.PIPE)
+    p.stdin.write(data)
+    p.stdin.close()
+    retcode = p.wait()
+    os.system('notify-send -u critical done')
+
+soal = getClipboardData()
+splitter = b"""\n\n\t\t\t\t\t\n\t\t"""
+soal = soal.split(splitter)
 
 
 
-# source = "source"
+# pattern = r"( \t\t\t\n\t\t)*[0-9]{1,2}\.\ \t(.*)( \tMark for Review )"
+pattern = r"""([0-9]{1,2}\.)(\s)*(.*)(\w*)"""
+from_oracle = []
+for i in soal:
+    i = re.sub(r'[\s]*mark for review[\s]*', '', str(re.search(pattern.encode("utf-8"), i).groups()[2].decode("utf-8").lower()))
+    
+    from_oracle.append(i)
+    #print(i)
 
-# def get_oracle(url):
-#     session = HTMLSession()
-#     r = session.get(url)
-#     time.sleep(2)
-#     r.html.render(sleep=1, keep_page=True)
-#     return (r.html.page.content())
+all_ans = []
+soal_real = ""
+jwb_real = []
+soal_before = False
+options = 0
+all_soal = [] # prevent the same question in database
 
-# print(help(get_oracle("http://ilearning.oracle.com/ilearn/en/learner/jsp/player.jsp?rco_id=2345781686&classroom_id=2374678804&scorm_attempt=1580633557854&sessionId=-19520474731580633557870&home_url=http%3A%2F%2Filearning.oracle.com%2Filearn%2Fen%2Flearner%2Fjsp%2Foffering_details_home.jsp%3Faction%3Dexpand%26item%3D2345781676%26current_rco_id%3D2345781900%26classid%3D2374678804")))
-my_url = "http://ilearning.oracle.com/ilearn/en/learner/jsp/player.jsp?rco_id=2345781686&classroom_id=2374678804&scorm_attempt=1580638598740&sessionId=-14053428951580638598783&home_url=http%3A%2F%2Filearning.oracle.com%2Filearn%2Fen%2Flearner%2Fjsp%2Foffering_details_home.jsp%3Fclassid%3D2374678804"
+source = os.path.join(os.path.dirname(os.path.abspath(__file__)), "source")
+# print(from_oracle)
+# print("EXTACTED: ")
+# for ext in from_oracle:
+#     print("|"+ext+"|")
+# exit()
+for root, dirs, files in os.walk(source):
+   for file in files:
+       if file.endswith(".html") and ("@" not in file):
+            file = os.path.join(os.getcwd(), root, file)
+# if True:
+#     if True:
+#         if True:            
+#             file = ('/media/data/programming/python_saya/oracle_scrapping/source/2017/12/kunci-jawaban-all-quiz-oracle-academy_26.html')
+            with open(file, "r") as file_read:
+                content = file_read.read()
+                content_parsed = BeautifulSoup(content, 'html.parser').get_text(separator='\t\t\t')
+                content_lower = content_parsed.lower()
+                no_ext = 0
+                for ext in from_oracle:
+                    no_ext+=1
+                            
+                    if (ext in content_lower):                            
+                        content = re.split(r'\t\t\t', content_parsed.replace(chr(160), ''))
+                        content_index = 0
+                        soal_found = False
+                        for i in content:
+                            if (re.search(r'^[\n|\s]*$', i)):
+                                continue
+                            content_index+=1                     
+                            if (ext in i.lower()):
+                                if (ext in all_soal):
+                                    # print("LANJUT\n\n\n\n\n\n")
+                                    continue                                                   
+                                print(f'Question {i} in {file}')
+                                # print('Founded question:', i)
+                                if ("Mark for Review" in i):
+                                    i = re.search(r'(.*)([\s]*Mark for Review[\s]*)', i).groups()[0]
+                                
+                                first_answer = re.search(r'(.*\?)\ (.*)', i)
+                                if (first_answer):
+                                    fw = first_answer.groups()
+                                    i = fw[0]
+                                    content[content_index-1] = i
+                                    content.insert(content_index, fw[1])   
+                                all_ans.append(jwb_real)
+                                jwb_real = [no_ext-1]
+                                soal_found = True
+                                all_soal.append(ext)
+                                continue
 
-from requests_html import HTMLSession
+                            if (soal_found):
+                                soal0 = "Mark for Review" in i
+                                soal1 = re.search(r'([\s]*)(\d{1,2})\.(\s*)(.*)', i)                                                        
+                                if (soal0 or soal1):
+                                    soal_found = False
+                                    options = 0
+                                    continue
+                                else:
+                                    print("OPTION: ", i)
+                                    if ("(*)" in i):
+                                        jwb_real.append(i)
+                                    options+=1
+                        # print(content)
+                        # exit()
+                                                            
 
-false = "false"
-true = "true"
-null = "null"
-cookies =     {
-        "name": "ORA_UCM_INFO",
-        "value": "3~902F51F34032CF1AE050E60AD17F45B4~Kevin~Agusto~kevinagusto28@gmail.com",
-        "domain": ".oracle.com",
-        "hostOnly": false,
-        "path": "/",
-        "secure": false,
-        "httpOnly": false,
-        "sameSite": "no_restriction",
-        "session": false,
-        "firstPartyDomain": "",
-        "expirationDate": "1587338935",
-        "storeId": null
-    }
-session = HTMLSession()
-r = session.get(my_url, cookies=cookies)
-r.html.render(sleep=1, keep_page=True)
-print((r.html.full_text))
+
+all_ans.append(jwb_real)
+del all_ans[0]
+#all_ans = sort(all_ans)
+print(all_ans)
+setClipboardData(str(all_ans).encode('utf-8'))

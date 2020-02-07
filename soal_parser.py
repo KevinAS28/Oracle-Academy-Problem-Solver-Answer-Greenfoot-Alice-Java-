@@ -135,10 +135,13 @@ jwb_real = []
 soal_before = False
 options = 0
 all_soal = [] # prevent the same question in database
-for root, dirs, files in os.walk(source):
-    for file in files:
-        if file.endswith(".html") and ("@" not in file):
-            file = os.path.join(os.getcwd(), root, file)
+#for root, dirs, files in os.walk(source):
+#    for file in files:
+#        if file.endswith(".html") and ("@" not in file):
+if True:
+    if True:
+            #file = os.path.join(os.getcwd(), root, file)
+            file = ('/media/data/programming/python_saya/oracle_scrapping/source/2017/12/kunci-jawaban-all-quiz-oracle-academy_26.html')
             with open(file, "r") as file_read:
                 content = file_read.read()
                 content_lower = BeautifulSoup(content, 'html.parser').get_text().lower()
@@ -146,7 +149,7 @@ for root, dirs, files in os.walk(source):
                 for ext in from_oracle:
                     # print(content_lower)
                     if (ext in content_lower):
-                        #print("Found question {} in {}".format(ext, file))
+                        print("Found question {} in {}".format(ext, file))
                         try:
                             html_soup = BeautifulSoup(content, 'html.parser')
                             content = html_soup.find_all('div', attrs={'itemprop': 'description'})[0].get_text(separator='\t\t\t')
@@ -163,7 +166,6 @@ for root, dirs, files in os.walk(source):
                         for i in content:
                             soal0 = "Mark for Review" in i
                             soal1 = re.search(r'([\s]*)(\d{1,2})\.(\s*)(.*)', i)
-
                             if (("[Correct]" in i) or ("[Incorrect]" in i) or ("(Choose all correct answers)" in i) or (re.match(r'^(\s)*$', i))) or (re.search(r'^[\s|\t|\n]*$', i)) or (re.search(r'([\s]*)(\(\d{1,1}\))([\s]*)Points', i)):
                                 #soal_before = False
                                 continue
@@ -198,7 +200,7 @@ for root, dirs, files in os.walk(source):
 # exit()                    
 all_ans.append(jwb_real)
 print(all_ans)
-setClipboardData(str(all_ans).encode('utf-8'))
+#setClipboardData(str(all_ans).encode('utf-8'))
 
 # exit(0)
             

@@ -72,6 +72,7 @@ for root, dirs, files in os.walk(source):
                                 if (ext in all_soal):
                                     # print("LANJUT\n\n\n\n\n\n")
                                     continue                                                   
+                                    
                                 print(f'Question {i} in {file}')
                                 # print('Founded question:', i)
                                 if ("Mark for Review" in i):
@@ -91,7 +92,7 @@ for root, dirs, files in os.walk(source):
 
                             if (soal_found):
                                 soal0 = "Mark for Review" in i
-                                soal1 = re.search(r'([\s]*)(\d{1,2})\.(\s*)(.*)', i)                                                        
+                                soal1 = re.match(r'([\s]*)(\d{1,2})\.(\s*)(.*)', i)                                                        
                                 if (soal0 or soal1):
                                     soal_found = False
                                     options = 0
